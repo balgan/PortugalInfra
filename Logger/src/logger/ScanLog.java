@@ -9,6 +9,8 @@ import com.eaio.stringsearch.BNDMWildcards;
 import com.eaio.stringsearch.BoyerMooreHorspoolRaita;
 import com.eaio.stringsearch.StringSearch;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import org.w3c.dom.*;
@@ -58,7 +60,6 @@ public class ScanLog implements Runnable {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException {
-
         if (args.length > 0) {
             ScanLog l = new ScanLog(args);
             l.run();
@@ -109,7 +110,10 @@ public class ScanLog implements Runnable {
                                     productFound = getAttribute(registo, product);
                                     addProduct(productFound);
 
-//                                    addressFound = getAttribute(registo, address);
+                                    x = so.searchChars(registo.toCharArray(), "bl19-70-153.dsl.telepac.pt".toCharArray());
+                                    if(x != -1){
+                                        System.out.println("Found it -> "+registo);
+                                    }
 
                                     //Encontrar service
                                     serviceFound = getAttribute(registo, service);
@@ -118,8 +122,6 @@ public class ScanLog implements Runnable {
                                     break;
                                 }
                                 break;
-                            } else {
-                                registo += line;
                             }
                             if (so.searchChars(line.toCharArray(), filtered.toCharArray()) != -1) {
                                 break;
@@ -135,22 +137,22 @@ public class ScanLog implements Runnable {
         }
 
         //Listar services
-        System.out.println(BLUE+"######### Listar Hostnames ########");
+        System.out.println(BLUE + "######### Listar Hostnames ########"+NONE);
         for (Object object : serviceList.keySet()) {
             String object1 = (String) object;
             System.out.println(object1 + " - " + serviceList.get(object1));
         }
         System.out.println("Total Hostnames - " + totalService);
-        System.out.println(BLUE+"###################################");
+        System.out.println(BLUE + "###################################"+NONE);
         System.out.println("\n\n");
         //Listar products
-        System.out.println(RED+"######### Listar Versoes #########");
+        System.out.println(RED + "######### Listar Versoes #########"+NONE);
         for (Object object : productList.keySet()) {
             String object1 = (String) object;
             System.out.println(object1 + " - " + productList.get(object1));
         }
         System.out.println("Total Versoes - " + totalProduct);
-        System.out.println(RED+"##################################");
+        System.out.println(RED + "##################################"+NONE);
 
         System.out.println("\n\n");
         System.out.println("Total registos -> " + totalRegistos);
