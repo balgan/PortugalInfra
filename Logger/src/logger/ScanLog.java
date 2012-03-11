@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+/*balgan teste*/
 package logger;
 
 import com.eaio.stringsearch.BNDM;
@@ -110,10 +107,10 @@ public class ScanLog implements Runnable {
                                     productFound = getAttribute(registo, product);
                                     addProduct(productFound);
 
-                                    x = so.searchChars(registo.toCharArray(), "bl19-70-153.dsl.telepac.pt".toCharArray());
-                                    if(x != -1){
-                                        System.out.println("Found it -> "+registo);
-                                    }
+//                                    x = so.searchChars(registo.toCharArray(), "bl19-70-153.dsl.telepac.pt".toCharArray());
+//                                    if(x != -1){
+//                                        System.out.println("Found it -> "+registo);
+//                                    }
 
                                     //Encontrar service
                                     serviceFound = getAttribute(registo, service);
