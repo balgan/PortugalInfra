@@ -32,7 +32,6 @@ public class ScanLog implements Runnable {
     private String NONE = "\033[0m";
     private static ConcurrentHashMap productList = new ConcurrentHashMap();
     private static ConcurrentHashMap serviceList = new ConcurrentHashMap();
-    private static ArrayList<Open> openList = new ArrayList();
     private static long totalProduct = 0;
     private static long totalService = 0;
     private boolean t = false;
@@ -47,13 +46,11 @@ public class ScanLog implements Runnable {
     private final String address = "addr=\"";
     private int totalRegistos = 0;
     private int totalOpen = 0;
-    private static int x = -1;
     private static String s = "";
     private static Integer n = null;
     //0 -> normal
     //1 -> procurar por stirng
     private static int searchMode = 0;
-    private static BNDM b = new BNDM();
     private static StringSearch so = new BoyerMooreHorspoolRaita();
     private static long time = 0;
 
@@ -138,22 +135,22 @@ public class ScanLog implements Runnable {
         }
 
         //Listar services
-        System.out.println("######### Listar Hostnames #########");
+        System.out.println(BLUE+"######### Listar Hostnames ########");
         for (Object object : serviceList.keySet()) {
             String object1 = (String) object;
             System.out.println(object1 + " - " + serviceList.get(object1));
         }
         System.out.println("Total Hostnames - " + totalService);
-        System.out.println("###################################");
+        System.out.println(BLUE+"###################################");
         System.out.println("\n\n");
         //Listar products
-        System.out.println("######### Listar Versoes #########");
+        System.out.println(RED+"######### Listar Versoes #########");
         for (Object object : productList.keySet()) {
             String object1 = (String) object;
             System.out.println(object1 + " - " + productList.get(object1));
         }
         System.out.println("Total Versoes - " + totalProduct);
-        System.out.println("###################################");
+        System.out.println(RED+"##################################");
 
         System.out.println("\n\n");
         System.out.println("Total registos -> " + totalRegistos);
