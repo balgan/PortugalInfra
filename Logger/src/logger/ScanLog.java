@@ -19,7 +19,7 @@ import org.w3c.dom.*;
  */
 public class ScanLog implements Runnable {
 
-    String filename = "portugal-FINAL.telnet.xml";
+    String filename = "C:\\Users\\Tiago\\Documents\\portugal-FINAL.telnet.xml";
     String search;
     File _file = new File(filename);
     long _updateInterval = 1000;
@@ -39,7 +39,7 @@ public class ScanLog implements Runnable {
     private static int i = 0;
     private String registo = "";
     private final String start = "<host";
-    private final String end = "</host";
+    private final String end = "</host>";
     private final String open = "open";
     private final String service = "hostname=\"";
     private final String product = "product=\"";
@@ -97,66 +97,40 @@ public class ScanLog implements Runnable {
             String productFound;
             String addressFound = "";
             int x = -1;
-            // Continue to read lines while 
-            // there are still some left to read
+
+            //Processar ficheiro..
             while ((line = br.readLine()) != null) {
-                //Process line
                 if (line.length() > 0) {
+                    //Procurar por um host
                     x = so.searchChars(line.toCharArray(), start.toCharArray());
                     if (x != -1) {
-//                        System.out.println("Found start");
-                        registo = "";
+                        registo = line;
+                        //Enquanto não encontrar o fim adiciona
                         while ((line = br.readLine()) != null) {
+                            registo += line;
                             x = so.searchChars(line.toCharArray(), end.toCharArray());
                             if (x != -1) {
-
                                 //Encontrar host aberto
+//                                System.out.println("Encontrei fim, saltar");
                                 x = so.searchChars(registo.toCharArray(), open.toCharArray());
                                 if (x != -1) {
+//                                    System.out.println("Adicionar Registo e limpar -> "+registo);
                                     //Encontrar product name
                                     productFound = getAttribute(registo, product);
-                                    if (productFound != null) {
-                                        if (productFound.isEmpty()) {
-                                            productFound = "UNKOWN";
-                                        }
-                                        Long n = (Long) productList.get(productFound);
-                                        totalProduct++;
-                                        if (n != null) {
-                                            n = n + 1;
-                                            productList.put(productFound, n);
-                                        } else {
-
-                                            productList.put(productFound, 1L);
-                                        }
-                                    }
+                                    addProduct(productFound);
 
                                     addressFound = getAttribute(registo, address);
 
                                     //Encontrar service
                                     serviceFound = getAttribute(registo, service);
-                                    if (serviceFound != null) {
-                                        if (serviceFound.isEmpty()) {
-                                            serviceFound = "UNKOWN";
-                                        }
-                                        Long n = (Long) serviceList.get(serviceFound);
-                                        totalService++;
-                                        if (n != null) {
-                                            n = n + 1;
-                                            serviceList.put(serviceFound, n);
-                                        } else {
-
-                                            serviceList.put(serviceFound, 1L);
-                                        }
-                                    }
-
+                                    addService(serviceFound);
+                                    break;
                                 }
-//                                System.out.println(registo);
                                 registo = "";
+                                break;
                             } else {
-//                                System.out.println("Not start");
                                 registo += line;
                             }
-                            addressFound = "";
                         }
                     }
                 }
@@ -184,6 +158,38 @@ public class ScanLog implements Runnable {
         System.out.println("Total - " + totalService);
     }
 
+    private void addProduct(String productFound) {
+        if (productFound != null) {
+            if (productFound.isEmpty()) {
+                productFound = "UNKOWN";
+            }
+            Long n = (Long) productList.get(productFound);
+            totalProduct++;
+            if (n != null) {
+                n = n + 1;
+                productList.put(productFound, n);
+            } else {
+                productList.put(productFound, 1L);
+            }
+        }
+    }
+
+    private void addService(String serviceFound) {
+        if (serviceFound != null) {
+            if (serviceFound.isEmpty()) {
+                serviceFound = "UNKOWN";
+            }
+            Long n = (Long) serviceList.get(serviceFound);
+            totalService++;
+            if (n != null) {
+                n = n + 1;
+                serviceList.put(serviceFound, n);
+            } else {
+                serviceList.put(serviceFound, 1L);
+            }
+        }
+    }
+
     private String getAttribute(String line, String attribute) {
         String s = "";
         int x = so.searchChars(line.toCharArray(), attribute.toCharArray());
@@ -195,124 +201,4 @@ public class ScanLog implements Runnable {
             return null;
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-//    private String processBDMD(String line) {
-//        try {
-//            System.out.println("line " + line);
-//            BNDM b = new BNDM();
-//            StringSearch so = new BoyerMooreHorspoolRaita();
-//            String IP = "";
-//            String service = "";
-//            String version = "";
-//            String IPRegex = "(";
-//            BNDMWildcards bRegex = new BNDMWildcards();
-//            Object o = bRegex.processString(IPRegex);
-//            int ipLocation = bRegex.searchString(line, IPRegex, o);
-//            if (ipLocation == -1) {
-//            } else {
-//                int ipLocationLastPos = bRegex.searchString(line, ")");
-////                System.out.println("IP -> " + line.substring(ipLocation + 1, ipLocationLastPos));
-//            }
-////            System.out.println(ipLocation);
-//            int x = so.searchChars(line.toCharArray(), search.toCharArray());
-//            if (x == -1) {
-//            } else {
-//
-//                if (line.length() > 20) {
-//                    version = line.substring(21, line.length());
-//                }
-////            System.out.println(found);
-//                total++;
-//                i++;
-//
-//                if (version.isEmpty() || version.length() == 0) {
-//                    version = "UNKOWN";
-//                }
-//                Long n = (Long) listaServico.get(version.trim());
-//                if (n != null) {
-//                    n = n + 1;
-//                    listaServico.put(version.trim(), n);
-//                } else {
-//                    listaServico.put(version.trim(), 1L);
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return "";
-//    }
-//
-//    private String process(String s) {
-//        String returnS = "";
-//        String ip = "";
-//        String[] linha = s.split(" ");
-//        if (linha.length > 1) {
-//            if (linha[0].equals("Interesting")) {
-////                System.out.println("Interesting!!");
-//                ip = linha[linha.length - 1].substring(1, linha[linha.length - 1].length() - 2);
-////                System.out.println(ip);
-//            } else if (linha[0].equals("PORT")) {
-////                System.out.println("Port!!");
-//            } else {
-//                String porto = "";
-//                String estado = "";
-//                String servico = "";
-//                String fabricante = "";
-////                System.out.println("linha 1 " + linha[1]);
-//                if (linha[1].equals("open")) {
-////                    System.out.println("Open");
-//                    total++;
-//                    i++;
-//                    for (int i = 0; i < linha.length; i++) {
-//                        String string = linha[i];
-//                        if (i == 0) {
-//                            porto = string;
-//                        } else if (i == 1) {
-//                            estado = string;
-//                        } else if (i == 3) {
-//                            servico = string;
-//                        } else if (i > 4) {
-//                            fabricante += string;
-//                            if (i < linha.length) {
-//                                fabricante += " ";
-//                            }
-//                        }
-//                    }
-//
-//                    Open o = new Open();
-//                    o.setFabricante(fabricante);
-//                    o.setIp(ip);
-//                    o.setPorto(porto);
-//                    openList.add(o);
-////                    System.out.println("porto - " + porto);
-////                    System.out.println("estado - " + estado);
-////                    System.out.println("servico - " + servico);
-////                    System.out.println("fabricante - " + fabricante);
-//                    if (fabricante.isEmpty()) {
-//                        fabricante = "UNKOWN";
-//                    }
-//                    Long n = (Long) listaServico.get(fabricante.trim());
-////            System.out.println("Adicionar fabricante - "+fabricante );
-////        System.out.println("Este fabricante já tem -> " + n);
-//                    if (n != null) {
-//                        n = n + 1;
-//                        listaServico.put(fabricante.trim(), n);
-//                    } else {
-////            System.out.println("Nao existe fabricante - "+fabricante);
-//                        listaServico.put(fabricante.trim(), 1L);
-//                    }
-//
-//                }
-//            }
-//        }
-//        return returnS;
-//    }
 }
