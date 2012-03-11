@@ -110,16 +110,14 @@ public class ScanLog implements Runnable {
                             registo += line;
                             x = so.searchChars(line.toCharArray(), end.toCharArray());
                             if (x != -1) {
-                                //Encontrar host aberto
-//                                System.out.println("Encontrei fim, saltar");
+                                //Encontrar host abert
                                 x = so.searchChars(registo.toCharArray(), open.toCharArray());
                                 if (x != -1) {
-//                                    System.out.println("Adicionar Registo e limpar -> "+registo);
                                     //Encontrar product name
                                     productFound = getAttribute(registo, product);
                                     addProduct(productFound);
 
-                                    addressFound = getAttribute(registo, address);
+//                                    addressFound = getAttribute(registo, address);
 
                                     //Encontrar service
                                     serviceFound = getAttribute(registo, service);
@@ -194,7 +192,7 @@ public class ScanLog implements Runnable {
         String s = "";
         int x = so.searchChars(line.toCharArray(), attribute.toCharArray());
         if (x != -1) {
-            String subString = registo.substring(product.length() + x, registo.length());
+            String subString = registo.substring(attribute.length() + x, registo.length());
             s = subString.substring(0, so.searchChars(subString.toCharArray(), "\"".toCharArray()));
             return s;
         } else {
