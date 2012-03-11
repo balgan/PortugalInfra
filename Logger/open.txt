@@ -1,0 +1,23 @@
+Interesting ports on 80.172.30.37:
+PORT   STATE    SERVICE VERSION
+23/tcp filtered telnet
+
+Interesting ports on 80.172.30.38:
+PORT   STATE    SERVICE VERSION
+23/tcp filtered telnet
+
+Interesting ports on 80.172.30.39:
+PORT   STATE    SERVICE VERSION
+23/tcp filtered telnet
+
+Interesting ports on 80.172.30.40:
+PORT   STATE SERVICE    VERSION
+23/tcp open  tcpwrapped
+
+Interesting ports on 80.172.30.41:
+PORT   STATE SERVICE VERSION
+23/tcp open  telnet?
+
+Interesting ports on 80.172.30.42:
+PORT   STATE    SERVICE VERSION
+23/tcp filtered telnet
