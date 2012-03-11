@@ -44,6 +44,8 @@ public class ScanLog implements Runnable {
     private final String service = "hostname=\"";
     private final String product = "product=\"";
     private final String address = "addr=\"";
+    private int totalRegistos = 0;
+    private int totalOpen = 0;
     //0 -> normal
     //1 -> procurar por stirng
     private static int searchMode = 0;
@@ -110,9 +112,11 @@ public class ScanLog implements Runnable {
                             registo += line;
                             x = so.searchChars(line.toCharArray(), end.toCharArray());
                             if (x != -1) {
+                                totalRegistos++;
                                 //Encontrar host abert
                                 x = so.searchChars(registo.toCharArray(), open.toCharArray());
                                 if (x != -1) {
+                                    System.out.println(registo);
                                     //Encontrar product name
                                     productFound = getAttribute(registo, product);
                                     addProduct(productFound);
@@ -122,6 +126,8 @@ public class ScanLog implements Runnable {
                                     //Encontrar service
                                     serviceFound = getAttribute(registo, service);
                                     addService(serviceFound);
+
+                                    totalOpen++;
                                     break;
                                 }
                                 registo = "";
@@ -140,20 +146,29 @@ public class ScanLog implements Runnable {
             e.printStackTrace();
         }
 
-        //Listar products
-        for (Object object : productList.keySet()) {
-            String object1 = (String) object;
-            System.out.println(object1 + " - " + productList.get(object1));
-        }
-        System.out.println("Total - " + totalProduct + "\n\n\n\n");
-
-
         //Listar services
+        System.out.println("######### Listar Hostnames #########");
         for (Object object : serviceList.keySet()) {
             String object1 = (String) object;
             System.out.println(object1 + " - " + serviceList.get(object1));
         }
-        System.out.println("Total - " + totalService);
+        System.out.println("Total Hostnames - " + totalService);
+        System.out.println("###################################");
+        System.out.println("\n\n");
+        //Listar products
+        System.out.println("######### Listar Versoes #########");
+        for (Object object : productList.keySet()) {
+            String object1 = (String) object;
+            System.out.println(object1 + " - " + productList.get(object1));
+        }
+        System.out.println("Total Versoes - " + totalProduct);
+        System.out.println("###################################");
+        
+        System.out.println("\n\n");
+        System.out.println("Total registos -> " + totalRegistos);
+        System.out.println("Total Open -> " + totalOpen);
+
+        System.out.println("\n\n");
     }
 
     private void addProduct(String productFound) {
